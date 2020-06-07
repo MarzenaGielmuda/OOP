@@ -1,8 +1,30 @@
 package observer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class Subject {
 
-    public Subject(final Observer observer){
+    public List<Observer> getObservers() {
+        return observers;
+    }
+
+    public void subscribe(Observer observer) {
+        this.observers.add(observer);
+    }
+
+    public void removeSubscribe(Observer observer) {
+        this.observers.remove(observer);
+    }
+
+    private List <Observer> observers;
+
+    public Subject(){
+        observers = new ArrayList<Observer>();
+    }
+
+    public void startWork(){
 
         Thread thread = new Thread(new Runnable() {
             public void run() {
@@ -14,7 +36,9 @@ public class Subject {
                         e.printStackTrace();
                     }
                 }
-                observer.update();
+                for (Observer observer : observers){
+                    observer.sendData(UUID.randomUUID().toString());
+                }
             }
         });
         thread.start();
